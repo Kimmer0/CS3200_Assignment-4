@@ -4,7 +4,7 @@
 SELECT
     c.FirstName || ' ' || c.LastName AS CustomerName,
     c.Country,
-    ROUND(SUM(ii.UnitPrice * ii.Quantity), 2) AS TotalSpent,
+    ROUND(SUM(i2.UnitPrice * i2.Quantity), 2) AS TotalSpent,
     ROUND((SELECT AVG(sub.CustomerTotal)
            FROM (SELECT SUM(ii2.UnitPrice * ii2.Quantity) AS CustomerTotal
                  FROM customers c2
@@ -14,7 +14,7 @@ SELECT
                  GROUP BY c2.CustomerId) sub), 2) AS CountryAvgSpend
 FROM customers c
 JOIN invoices i ON c.CustomerId = i.CustomerId
-JOIN invoice_items ii ON i.InvoiceId = ii.InvoiceId
+JOIN invoice_items i2 ON i.InvoiceId = i2.InvoiceId
 WHERE c.Country IS NOT NULL
 GROUP BY c.CustomerId, c.FirstName, c.LastName, c.Country
 ORDER BY c.Country;
